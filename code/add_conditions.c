@@ -21,7 +21,7 @@ void at_least_one_valid_street_for_each_step(CNF* formula, unsigned num_of_cross
         // pro kazdy krok i
         Clause* cl = create_new_clause(formula);
         for (int j = 0; j < num_of_streets; j++) {
-            // pro kazdou krizovatku j
+            // pro kazdou cestu j
             unsigned z = streets[j].crossroad_from;
             unsigned k = streets[j].crossroad_to;
             add_literal_to_clause(cl, true, i, z, k);
@@ -36,19 +36,17 @@ void at_most_one_street_for_each_step(CNF* formula, unsigned num_of_crossroads, 
     assert(formula != NULL);
     assert(num_of_crossroads > 0);
     assert(num_of_streets > 0);
-
+    
     for (unsigned i = 0; i < num_of_streets; ++i) {
-        // pro kazdy krok i
-        for (unsigned j = 0; j < num_of_streets; ++j) {
-            // pro kazdou krizovatku j
+        for (unsigned z = 0; z < num_of_crossroads; ++z) {
             for (unsigned k = 0; k < num_of_crossroads; ++k) {
-                // pro kazdou krizovatku k
-                for (unsigned z = 0; z < num_of_crossroads; ++z) {
-                    if (z != k) {
-                        // pokud j != k
-                        Clause* cl = create_new_clause(formula);
-                        add_literal_to_clause(cl, false, i, j, z);
-                        add_literal_to_clause(cl, false, i, k, z);
+                for (unsigned j = 0; j < num_of_crossroads; ++j) {
+                    if(z != j) {
+                        for (unsigned l = 0; l < num_of_crossroads; ++l) {
+                            Clause* cl = create_new_clause(formula);
+                            add_literal_to_clause(cl, false, i, z, k);
+                            add_literal_to_clause(cl, false, i, j, l);
+                        }
                     }
                 }
             }
@@ -64,7 +62,18 @@ void streets_connected(CNF* formula, unsigned num_of_crossroads, unsigned num_of
     assert(num_of_crossroads > 0);
     assert(num_of_streets > 0);
 
-    // ZDE PRIDAT KOD
+    for (unsigned i = 0; i < num_of_streets; ++i) {
+        for (unsigned z = 0; z < num_of_crossroads; ++z) {
+            for (unsigned k = 0; k < num_of_crossroads; ++k) {
+                Clause* cl = create_new_clause(formula);
+                add_literal_to_clause(cl, false, i, z, k);
+                for (unsigned l = 0; l < num_of_crossroads; ++l) {
+                    add_literal_to_clause(cl, true, i + 1, k, l);
+                }
+            }
+        }
+        
+    }
 }
 
 // Tato funkce by mela do formule pridat klauzule predstavujici podminku 4)
