@@ -37,7 +37,23 @@ void at_most_one_street_for_each_step(CNF* formula, unsigned num_of_crossroads, 
     assert(num_of_crossroads > 0);
     assert(num_of_streets > 0);
 
-    // ZDE PRIDAT KOD
+    for (unsigned i = 0; i < num_of_streets; ++i) {
+        // pro kazdy krok i
+        for (unsigned j = 0; j < num_of_streets; ++j) {
+            // pro kazdou krizovatku j
+            for (unsigned k = 0; k < num_of_crossroads; ++k) {
+                // pro kazdou krizovatku k
+                for (unsigned z = 0; z < num_of_crossroads; ++z) {
+                    if (z != k) {
+                        // pokud j != k
+                        Clause* cl = create_new_clause(formula);
+                        add_literal_to_clause(cl, false, i, j, z);
+                        add_literal_to_clause(cl, false, i, k, z);
+                    }
+                }
+            }
+        }
+    }
 }
 
 // Tato funkce by mela do formule pridat klauzule predstavujici podminku 3)
