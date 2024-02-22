@@ -17,7 +17,16 @@ void at_least_one_valid_street_for_each_step(CNF* formula, unsigned num_of_cross
     assert(num_of_streets > 0);
     assert(streets != NULL);
 
-    // ZDE PRIDAT KOD
+    for (int i = 0; i < num_of_streets; i++) {
+        // pro kazdy krok i
+        Clause* cl = create_new_clause(formula);
+        for (int j = 0; j < num_of_streets; j++) {
+            // pro kazdou krizovatku j
+            unsigned z = streets[j].crossroad_from;
+            unsigned k = streets[j].crossroad_to;
+            add_literal_to_clause(cl, true, i, z, k);
+        }
+    }
 }
 
 // Tato funkce by mela do formule pridat klauzule predstavujici podminku 2)
