@@ -73,7 +73,7 @@ void streets_connected(CNF* formula, unsigned num_of_crossroads, unsigned num_of
                 Clause* cl = create_new_clause(formula);
                 add_literal_to_clause(cl, false, i, z, k);
                 for (unsigned l = 0; l < num_of_crossroads; ++l) {
-                    // pre kazdu nadchadzajucu krizovatku l
+                    // pre kazdu nadchadzajucu krizovatku zacinajucu v k a konciacu v l,
                     add_literal_to_clause(cl, true, i + 1, k, l);
                 }
             }
