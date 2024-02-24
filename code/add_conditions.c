@@ -18,12 +18,12 @@ void at_least_one_valid_street_for_each_step(CNF* formula, unsigned num_of_cross
     assert(streets != NULL);
 
     for (int i = 0; i < num_of_streets; i++) {
-        // pro kazdy krok i
+        // pre kazdy krok i
         Clause* cl = create_new_clause(formula);
         for (int j = 0; j < num_of_streets; j++) {
-            // pro kazdou cestu j
-            unsigned z = streets[j].crossroad_from;
-            unsigned k = streets[j].crossroad_to;
+            // pre kazdu cestu j
+            unsigned z = streets[j].crossroad_from; // z je zaciatok cesty
+            unsigned k = streets[j].crossroad_to; // k je koniec cesty
             add_literal_to_clause(cl, true, i, z, k);
         }
     }
@@ -38,11 +38,14 @@ void at_most_one_street_for_each_step(CNF* formula, unsigned num_of_crossroads, 
     assert(num_of_streets > 0);
     
     for (unsigned i = 0; i < num_of_streets; ++i) {
+        // pre kazdy krok i
         for (unsigned z = 0; z < num_of_crossroads; ++z) {
             for (unsigned k = 0; k < num_of_crossroads; ++k) {
+                // pre kazdu dvojicu krizovatiek (z, k)
                 for (unsigned j = 0; j < num_of_crossroads; ++j) {
-                    if(z != j) {
-                        for (unsigned l = 0; l < num_of_crossroads; ++l) {
+                    for (unsigned l = 0; l < num_of_crossroads; ++l) {
+                        if(z != j || k != l) {
+                            // pre kazdu dalsiu inú dvojicu krizovatiek (j, l)
                             Clause* cl = create_new_clause(formula);
                             add_literal_to_clause(cl, false, i, z, k);
                             add_literal_to_clause(cl, false, i, j, l);
@@ -63,11 +66,14 @@ void streets_connected(CNF* formula, unsigned num_of_crossroads, unsigned num_of
     assert(num_of_streets > 0);
 
     for (unsigned i = 0; i < num_of_streets; ++i) {
+        // pre kazdy krok i
         for (unsigned z = 0; z < num_of_crossroads; ++z) {
             for (unsigned k = 0; k < num_of_crossroads; ++k) {
+                // pre kazdu dvojicu krizovatiek (z, k)
                 Clause* cl = create_new_clause(formula);
                 add_literal_to_clause(cl, false, i, z, k);
                 for (unsigned l = 0; l < num_of_crossroads; ++l) {
+                    // pre kazdu nadchadzajucu krizovatku l
                     add_literal_to_clause(cl, true, i + 1, k, l);
                 }
             }
